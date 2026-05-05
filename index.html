@@ -802,12 +802,26 @@ async function submitForm() {
   };
 
   try {
+
+    const formData = new URLSearchParams(payload);
+
     const res  = await fetch(SHEET_URL, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+      body: formData
     });
-    const data = await res.json();
+    if (!res.ok) {
+      throw new Error("HTTP " + res.status);
+    }
+
+    const text = await res.text();
+    console.log("RAW RESPONSE:", text);
+
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch (e) {
+      throw new Error("Response bukan JSON valid");
+    }
 
     if (data.status === "ok") {
       sessionStorage.removeItem(CACHE_KEY); // paksa refresh kuota untuk pengunjung berikutnya
