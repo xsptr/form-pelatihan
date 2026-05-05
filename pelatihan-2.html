@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pendaftaran Pelatihan Public Speaking — UT Bandung</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue:        #0056D2;
+    --blue-light:  #1D6DDC;
+    --blue-dark:   #003E99;
+    --orange:      #FF9D1B;
+    --orange-dark: #E07E00;
+    --orange-light:#FFD08A;
+    --white:       #F9F9F9;
+    --surface:     #FFFFFF;
+    --surface2:    #EEF4FF;
+    --border:      #D0DFEE;
+    --text:        #0D1A2E;
+    --text-muted:  #5A7399;
+    --success:     #1A7F4B;
+    --success-bg:  #E8F8EF;
+    --success-border:#A8D5BC;
+    --danger:      #C0392B;
+    --danger-bg:   #FDECEA;
+    --danger-border:#F1A8A0;
+    --warn-bg:     #FFF8E6;
+    --warn-border: rgba(255,157,27,0.4);
+    --warn-text:   #7A5C00;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--white);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 40% at 50% -5%, rgba(0,86,210,0.07) 0%, transparent 65%),
+      radial-gradient(ellipse 40% 35% at 95% 95%, rgba(255,157,27,0.08) 0%, transparent 60%);
+    pointer-events: none; z-index: 0;
+  }
+
+  .container { position: relative; z-index: 1; max-width: 680px; margin: 0 auto; padding: 40px 20px 80px; }
+
+  /* ── HEADER ── */
+  .header { text-align: center; margin-bottom: 32px; animation: fadeDown 0.7s ease both; }
+  .header-badge { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--blue); border: 1.5px solid rgba(0,86,210,0.25); padding: 6px 18px; border-radius: 100px; margin-bottom: 20px; background: rgba(0,86,210,0.05); font-weight: 600; }
+  h1 { font-family: 'Playfair Display', serif; font-size: clamp(26px, 5vw, 44px); font-weight: 900; line-height: 1.1; letter-spacing: -0.5px; color: var(--blue); margin-bottom: 10px; }
+  h1 span { color: var(--orange); }
+  .header-sub { color: var(--text-muted); font-size: 14.5px; line-height: 1.6; }
+  .divider { width: 56px; height: 3px; background: linear-gradient(90deg, var(--blue), var(--orange)); margin: 18px auto 0; border-radius: 100px; }
+
+  /* ── KUOTA BANNER ── */
+  .kuota-banner {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+    margin-bottom: 28px;
+    animation: fadeDown 0.7s ease 0.06s both;
+  }
+
+  .kuota-card {
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 14px; padding: 16px 18px;
+    position: relative; overflow: hidden;
+    transition: border-color 0.25s;
+  }
+
+  .kuota-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  }
+  .kuota-card.luring::before { background: linear-gradient(90deg, var(--orange-dark), var(--orange)); }
+  .kuota-card.daring::before { background: linear-gradient(90deg, var(--blue), var(--blue-light)); }
+
+  .kuota-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .kuota-mode { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; }
+  .kuota-card.luring .kuota-mode { color: var(--orange-dark); }
+  .kuota-card.daring .kuota-mode { color: var(--blue); }
+
+  .kuota-badge {
+    font-size: 10px; font-weight: 700; padding: 3px 9px;
+    border-radius: 100px; letter-spacing: 0.5px;
+  }
+  .kuota-badge.tersedia { background: var(--success-bg); color: var(--success); }
+  .kuota-badge.hampir { background: var(--warn-bg); color: var(--warn-text); }
+  .kuota-badge.penuh { background: var(--danger-bg); color: var(--danger); }
+
+  .kuota-sisa { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; color: var(--text); line-height: 1; margin-bottom: 4px; }
+  .kuota-sisa.penuh { color: var(--danger); }
+  .kuota-sisa.hampir { color: var(--orange-dark); }
+
+  .kuota-label { font-size: 11.5px; color: var(--text-muted); margin-bottom: 10px; }
+
+  .kuota-bar { height: 5px; background: var(--border); border-radius: 100px; overflow: hidden; }
+  .kuota-fill { height: 100%; border-radius: 100px; transition: width 0.6s cubic-bezier(0.4,0,0.2,1); }
+  .kuota-card.luring .kuota-fill { background: linear-gradient(90deg, var(--orange-dark), var(--orange)); }
+  .kuota-card.daring .kuota-fill { background: linear-gradient(90deg, var(--blue), var(--blue-light)); }
+  .kuota-fill.penuh { background: var(--danger) !important; }
+  .kuota-fill.hampir { background: var(--orange) !important; }
+
+  /* Loading state kuota */
+  .kuota-loading { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); padding: 6px 0; }
+  .kuota-spinner { width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.7s linear infinite; }
+
+  /* ── INFO CARD ── */
+  .info-card {
+    background: var(--surface2); border: 1.5px solid rgba(0,86,210,0.15);
+    border-radius: 14px; padding: 16px 20px; margin-bottom: 28px;
+    display: flex; gap: 12px; align-items: flex-start;
+    animation: fadeDown 0.7s ease 0.1s both;
+  }
+  .info-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .info-text { font-size: 13.5px; color: var(--text-muted); line-height: 1.65; }
+  .info-text strong { color: var(--text); font-weight: 600; }
+
+  /* ── FORM CARDS ── */
+  .form-section { display: flex; flex-direction: column; gap: 14px; animation: fadeDown 0.7s ease 0.14s both; }
+
+  .form-card {
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 16px; padding: 20px 22px;
+    position: relative; overflow: hidden;
+    transition: border-color 0.25s, box-shadow 0.25s;
+  }
+  .form-card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+    background: linear-gradient(180deg, var(--blue), var(--blue-light));
+    opacity: 0; transition: opacity 0.3s; border-radius: 4px 0 0 4px;
+  }
+  .form-card.focused { border-color: rgba(0,86,210,0.3); box-shadow: 0 4px 20px rgba(0,86,210,0.07); }
+  .form-card.focused::before { opacity: 1; }
+  .form-card.filled { border-color: rgba(0,86,210,0.2); }
+  .form-card.filled::before { opacity: 0.5; }
+  .form-card.error { border-color: rgba(192,57,43,0.4); box-shadow: 0 4px 16px rgba(192,57,43,0.06); }
+  .form-card.error::before { background: var(--danger); opacity: 1; }
+
+  .field-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; color: var(--orange-dark); margin-bottom: 4px; }
+  .field-title { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: var(--blue); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .required { color: var(--danger); font-family: 'DM Sans', sans-serif; font-size: 14px; }
+
+  input[type="text"], input[type="email"], input[type="tel"] {
+    width: 100%; background: var(--white); border: 1.5px solid var(--border);
+    color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px;
+    padding: 12px 16px; border-radius: 10px; outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  input:focus { border-color: var(--blue-light); box-shadow: 0 0 0 3px rgba(0,86,210,0.1); }
+  input::placeholder { color: #B0C0D8; }
+  input.has-error { border-color: rgba(192,57,43,0.5); }
+
+  .field-error { font-size: 12px; color: var(--danger); margin-top: 7px; display: none; }
+  .field-error.show { display: block; }
+
+  /* ── MODE PILIHAN ── */
+  .mode-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .mode-option {
+    border: 2px solid var(--border); border-radius: 14px;
+    padding: 16px; cursor: pointer;
+    transition: all 0.22s ease; position: relative;
+    background: var(--white); text-align: center;
+    user-select: none;
+  }
+  .mode-option:hover:not(.disabled) { transform: translateY(-2px); }
+  .mode-option.luring:hover:not(.disabled) { border-color: rgba(255,157,27,0.5); box-shadow: 0 6px 20px rgba(255,157,27,0.12); }
+  .mode-option.daring:hover:not(.disabled) { border-color: rgba(0,86,210,0.4); box-shadow: 0 6px 20px rgba(0,86,210,0.1); }
+
+  .mode-option.selected.luring { border-color: var(--orange); background: rgba(255,157,27,0.05); box-shadow: 0 4px 20px rgba(255,157,27,0.15); }
+  .mode-option.selected.daring { border-color: var(--blue); background: rgba(0,86,210,0.04); box-shadow: 0 4px 20px rgba(0,86,210,0.12); }
+
+  .mode-option.disabled {
+    opacity: 0.55; cursor: not-allowed;
+    background: #F5F5F5; border-style: dashed;
+  }
+  .mode-option.disabled:hover { transform: none; box-shadow: none; }
+
+  .mode-check {
+    position: absolute; top: 10px; right: 10px;
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .mode-option.selected.luring .mode-check { background: var(--orange); color: #fff; opacity: 1; }
+  .mode-option.selected.daring .mode-check { background: var(--blue); color: #fff; opacity: 1; }
+
+  .mode-emoji { font-size: 28px; display: block; margin-bottom: 8px; line-height: 1; }
+  .mode-name { font-weight: 700; font-size: 14px; margin-bottom: 3px; }
+  .mode-option.luring .mode-name { color: var(--orange-dark); }
+  .mode-option.daring .mode-name { color: var(--blue); }
+  .mode-desc { font-size: 11.5px; color: var(--text-muted); line-height: 1.4; }
+  .mode-kuota-tag {
+    display: inline-block; font-size: 10.5px; font-weight: 700;
+    padding: 3px 8px; border-radius: 100px; margin-top: 8px;
+  }
+  .mode-option.luring .mode-kuota-tag { background: rgba(255,157,27,0.12); color: var(--orange-dark); }
+  .mode-option.daring .mode-kuota-tag { background: rgba(0,86,210,0.08); color: var(--blue); }
+  .mode-option.disabled .mode-kuota-tag { background: var(--danger-bg); color: var(--danger); }
+
+  .mode-penuh-note {
+    font-size: 11px; color: var(--danger); font-weight: 600;
+    margin-top: 6px; display: none;
+  }
+  .mode-option.disabled .mode-penuh-note { display: block; }
+
+  /* ── PROGRESS BAR FORM ── */
+  .form-progress {
+    margin-bottom: 20px;
+    animation: fadeDown 0.7s ease 0.18s both;
+  }
+  .form-progress-header { display: flex; justify-content: space-between; margin-bottom: 7px; }
+  .form-progress-label { font-size: 12px; color: var(--text-muted); }
+  .form-progress-count { font-size: 12px; color: var(--blue); font-weight: 700; }
+  .form-progress-bar { height: 4px; background: var(--border); border-radius: 100px; overflow: hidden; }
+  .form-progress-fill { height: 100%; background: linear-gradient(90deg, var(--blue), var(--orange)); border-radius: 100px; transition: width 0.4s ease; width: 0%; }
+
+  /* ── SUBMIT ── */
+  .submit-btn {
+    width: 100%; padding: 17px;
+    background: linear-gradient(135deg, var(--blue-dark), var(--blue), var(--blue-light));
+    color: #fff; font-family: 'DM Sans', sans-serif; font-size: 15px;
+    font-weight: 700; letter-spacing: 0.3px; border: none; border-radius: 14px;
+    cursor: pointer; transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+    margin-top: 8px; box-shadow: 0 6px 28px rgba(0,86,210,0.3);
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    animation: fadeDown 0.7s ease 0.28s both;
+  }
+  .submit-btn:hover:not(:disabled) { opacity: 0.92; transform: translateY(-2px); box-shadow: 0 10px 36px rgba(0,86,210,0.38); }
+  .submit-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .submit-hint { text-align: center; font-size: 12.5px; color: var(--text-muted); margin-top: 12px; transition: color 0.3s; animation: fadeDown 0.7s ease 0.32s both; }
+
+  /* Spinner */
+  .spinner { width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; display: none; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Toast */
+  .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--text); border-radius: 12px; padding: 13px 22px; font-size: 14px; color: #fff; box-shadow: 0 8px 32px rgba(0,0,0,0.15); transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 999; white-space: nowrap; max-width: 90vw; text-align: center; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.error { background: var(--danger); }
+  .toast.warn { background: var(--orange-dark); }
+
+  /* ── SUCCESS SCREEN ── */
+  .success-screen { display: none; text-align: center; padding: 56px 20px; animation: fadeUp 0.6s ease both; }
+  .success-icon { font-size: 64px; margin-bottom: 20px; display: block; animation: pop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.15s both; }
+  .success-title { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 900; color: var(--blue); margin-bottom: 10px; }
+  .success-title span { color: var(--orange); }
+  .success-sub { color: var(--text-muted); font-size: 15px; line-height: 1.65; margin-bottom: 28px; }
+
+  .success-detail {
+    background: var(--surface); border: 1.5px solid var(--border);
+    border-radius: 14px; padding: 6px 24px;
+    margin: 0 auto 20px; max-width: 460px; text-align: left;
+  }
+  .success-row { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-bottom: 1px solid var(--border); font-size: 13.5px; }
+  .success-row:last-child { border-bottom: none; }
+  .success-row-label { color: var(--text-muted); }
+  .success-row-val { color: var(--text); font-weight: 600; max-width: 55%; text-align: right; }
+  .success-row.highlight .success-row-val { color: var(--blue); font-size: 14px; }
+
+  .success-note { background: var(--success-bg); border: 1.5px solid var(--success-border); border-radius: 12px; padding: 14px 18px; font-size: 13.5px; color: var(--success); max-width: 460px; margin: 0 auto; line-height: 1.6; }
+
+  /* ── FOOTER ── */
+  .footer-brand { text-align: center; margin-top: 48px; padding-top: 22px; border-top: 1px solid var(--border); animation: fadeDown 0.7s ease 0.36s both; }
+  .footer-logo { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--text-muted); font-weight: 500; }
+  .footer-dot { width: 6px; height: 6px; background: var(--orange); border-radius: 50%; display: inline-block; }
+
+  /* ── PENDAFTARAN DITUTUP ── */
+  .closed-card {
+    background: var(--surface); border: 2px solid var(--danger-border);
+    border-radius: 20px; padding: 40px 28px; text-align: center;
+    margin-bottom: 28px; animation: fadeDown 0.7s ease 0.08s both;
+  }
+  .closed-icon { font-size: 52px; display: block; margin-bottom: 16px; }
+  .closed-title { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 900; color: var(--danger); margin-bottom: 10px; }
+  .closed-desc { font-size: 14px; color: var(--text-muted); line-height: 1.7; max-width: 400px; margin: 0 auto; }
+  .closed-divider { width: 40px; height: 2px; background: var(--danger-border); margin: 16px auto; border-radius: 100px; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-14px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pop { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+  @media (max-width: 480px) {
+    .container { padding: 24px 14px 60px; }
+    .form-card { padding: 16px; }
+    .mode-options { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .kuota-banner { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!--
+  ╔══════════════════════════════════════════════════════════════╗
+  ║  CARD PENDAFTARAN DITUTUP                                    ║
+  ║  Cara aktifkan: hapus tanda  /* dan */ di bawah ini,        ║
+  ║  lalu tambahkan  display:none  pada tag <div id="formView"> ║
+  ╚══════════════════════════════════════════════════════════════╝
+
+  <div class="closed-card">
+    <span class="closed-icon">🔒</span>
+    <div class="closed-title">Pendaftaran Ditutup</div>
+    <div class="closed-divider"></div>
+    <p class="closed-desc">
+      Maaf, pendaftaran Pelatihan Public Speaking UT Bandung
+      telah resmi ditutup. Pantau terus informasi kegiatan
+      selanjutnya melalui website dan media sosial UT Bandung.
+      Terima kasih atas antusiasme kalian! 🙏
+    </p>
+  </div>
+  -->
+
+   <!-- ══ FORM VIEW ══ -->
+  <div id="formView">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="header-badge">&#127908; Pelatihan Mahasiswa UT Bandung</div>
+      <h1>Pendaftaran<br><span>Pelatihan Public Speaking</span></h1>
+      <p class="header-sub">From Nervous to Impactful: Taklukan Grogi, Tampil Percaya Diri</p>
+      <div class="divider"></div>
+    </div>
+
+    <!-- Kuota Banner -->
+    <div class="kuota-banner">
+      <!-- Luring -->
+      <div class="kuota-card luring">
+        <div class="kuota-top">
+          <div class="kuota-mode">&#127979; Luring</div>
+          <div class="kuota-badge tersedia" id="badgeLuring">Memuat...</div>
+        </div>
+        <div class="kuota-loading" id="loadingLuring">
+          <div class="kuota-spinner"></div> Mengecek kuota...
+        </div>
+        <div id="kuotaInfoLuring" style="display:none">
+          <div class="kuota-sisa" id="sisaLuring">—</div>
+          <div class="kuota-label">sisa dari 75 kursi</div>
+          <div class="kuota-bar"><div class="kuota-fill" id="fillLuring" style="width:0%"></div></div>
+        </div>
+      </div>
+      <!-- Daring -->
+      <div class="kuota-card daring">
+        <div class="kuota-top">
+          <div class="kuota-mode">&#128187; Daring</div>
+          <div class="kuota-badge tersedia" id="badgeDaring">Memuat...</div>
+        </div>
+        <div class="kuota-loading" id="loadingDaring">
+          <div class="kuota-spinner"></div> Mengecek kuota...
+        </div>
+        <div id="kuotaInfoDaring" style="display:none">
+          <div class="kuota-sisa" id="sisaDaring">—</div>
+          <div class="kuota-label">sisa dari 1.000 kursi</div>
+          <div class="kuota-bar"><div class="kuota-fill" id="fillDaring" style="width:0%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Info -->
+    <div class="info-card">
+      <span class="info-icon">&#128221;</span>
+      <div class="info-text">
+        Isi data dengan <strong>lengkap dan benar</strong>. Pastikan nomor WA dan email aktif untuk pengiriman informasi link kegiatan. Pendaftaran yang sudah terkirim <strong>tidak dapat dibatalkan</strong>.
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="form-progress">
+      <div class="form-progress-header">
+        <span class="form-progress-label">Kelengkapan formulir</span>
+        <span class="form-progress-count" id="progressCount">0 / 6</span>
+      </div>
+      <div class="form-progress-bar">
+        <div class="form-progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <!-- Form fields -->
+    <div class="form-section">
+
+      <!-- NIM -->
+      <div class="form-card" id="cardNim">
+        <div class="field-label">Data Akademik</div>
+        <div class="field-title">NIM <span class="required">*</span></div>
+        <input type="text" id="inputNim" placeholder="Contoh: 041234567"
+          maxlength="9"
+          oninput="onFieldInput('nim')"
+          onfocus="setFocused('cardNim')" onblur="clearFocused('cardNim')" />
+        <div class="field-error" id="errNim">NIM tidak boleh kosong</div>
+      </div>
+
+      <!-- Nama -->
+      <div class="form-card" id="cardNama">
+        <div class="field-label">Identitas</div>
+        <div class="field-title">Nama Lengkap <span class="required">*</span></div>
+        <input type="text" id="inputNama" placeholder="Sesuai KTP / Kartu Mahasiswa"
+          oninput="onFieldInput('nama')"
+          onfocus="setFocused('cardNama')" onblur="clearFocused('cardNama')" />
+        <div class="field-error" id="errNama">Nama tidak boleh kosong</div>
+      </div>
+
+      <!-- Prodi -->
+      <div class="form-card" id="cardProdi">
+        <div class="field-label">Program Studi</div>
+        <div class="field-title">Prodi <span class="required">*</span></div>
+        <input type="text" id="inputProdi" placeholder="Contoh: Ilmu Komunikasi"
+          oninput="onFieldInput('prodi')"
+          onfocus="setFocused('cardProdi')" onblur="clearFocused('cardProdi')" />
+        <div class="field-error" id="errProdi">Prodi tidak boleh kosong</div>
+      </div>
+
+      <!-- Nomor HP -->
+      <div class="form-card" id="cardHp">
+        <div class="field-label">Kontak</div>
+        <div class="field-title">Nomor WhatsApp Aktif <span class="required">*</span></div>
+        <input type="tel" id="inputHp" placeholder="Contoh: 08123456789"
+          maxlength="15"
+          oninput="onFieldInput('hp')"
+          onfocus="setFocused('cardHp')" onblur="clearFocused('cardHp')" />
+        <div class="field-error" id="errHp">Masukkan nomor HP yang valid (minimal 10 digit)</div>
+      </div>
+
+      <!-- Email -->
+      <div class="form-card" id="cardEmail">
+        <div class="field-label">Kontak Digital</div>
+        <div class="field-title">Alamat Email <p class="kuota-label">(untuk pengiriman <i>e-certificate</i>)</p> <span class="required">*</span></div>
+        <input type="email" id="inputEmail" placeholder="Contoh: nama@email.com"
+          oninput="onFieldInput('email')"
+          onfocus="setFocused('cardEmail')" onblur="clearFocused('cardEmail')" />
+        <div class="field-error" id="errEmail">Masukkan alamat email yang valid</div>
+      </div>
+
+      <!-- Mode -->
+      <div class="form-card" id="cardMode">
+        <div class="field-title">Pilih Skema Pelatihan <span class="required">*</span></div>
+        <div class="mode-options">
+
+          <div class="mode-option luring" id="optLuring" onclick="selectMode('luring')">
+            <div class="mode-check">&#10003;</div>
+            <span class="mode-emoji">&#127979;</span>
+            <div class="mode-name">Luring</div>
+            <div class="mode-desc">Hadir langsung di kampus UT Bandung</div>
+            <div class="mode-kuota-tag" id="tagLuring">Maks. 75 peserta</div>
+            <div class="mode-penuh-note">&#128683; Kuota penuh</div>
+          </div>
+
+          <div class="mode-option daring" id="optDaring" onclick="selectMode('daring')">
+            <div class="mode-check">&#10003;</div>
+            <span class="mode-emoji">&#128187;</span>
+            <div class="mode-name">Daring</div>
+            <div class="mode-desc">Ikuti secara online via Zoom / platform digital</div>
+            <div class="mode-kuota-tag" id="tagDaring">Maks. 1.000 peserta</div>
+            <div class="mode-penuh-note">&#128683; Kuota penuh</div>
+          </div>
+
+        </div>
+        <div class="field-error" id="errMode">Pilih salah satu mode pelatihan</div>
+      </div>
+
+    </div><!-- /form-section -->
+
+    <button class="submit-btn" id="submitBtn" onclick="submitForm()" disabled>
+      <span class="spinner" id="spinner"></span>
+      <span id="submitLabel">Daftar Sekarang &#127908;</span>
+    </button>
+    <p class="submit-hint" id="submitHint">Lengkapi semua isian untuk mendaftar</p>
+
+    <div class="footer-brand">
+      <div class="footer-logo">
+        <span class="footer-dot"></span>
+        Universitas Terbuka &#8212; UT Bandung
+        <span class="footer-dot"></span>
+      </div>
+    </div>
+  </div><!-- /formView -->
+
+  <!-- ══ SUCCESS VIEW ══ -->
+  <div id="successView" class="success-screen">
+    <span class="success-icon">&#127942;</span>
+    <div class="success-title">Pendaftaran <span>Berhasil!</span></div>
+    <p class="success-sub" id="successSub">Selamat! Kamu telah terdaftar sebagai peserta pelatihan Public Speaking UT Bandung.</p>
+    <div class="success-detail" id="successDetail"></div>
+    <div class="success-note">
+      &#10003;&nbsp; Data pendaftaranmu sudah tersimpan. Tim kami akan menghubungimu melalui nomor HP atau email yang didaftarkan. Sampai jumpa di pelatihan! &#128591;
+    </div>
+  </div>
+
+</div><!-- /container -->
+<div class="toast" id="toast"></div>
+
+<script>
+  /* <![CDATA[ */
+// ============================================================
+// KONFIGURASI
+// ============================================================
+const SHEET_URL    = "https://script.google.com/macros/s/AKfycbyjARBMBOyNUdxdDHbjik9OQZJkYwBGjBwIipRDCloO3XVWWB3cNrM9BQEF4H5zRdaYYw/exec";
+const KUOTA_LURING = 75;    // ← ubah angka ini jika kuota ditambah/dikurangi
+const KUOTA_DARING = 1000;  // ← ubah angka ini jika kuota ditambah/dikurangi
+const CACHE_KEY    = "kuota_cache";
+const CACHE_TTL    = 60000; // cache berlaku 60 detik
+
+// ── State ──
+let kuota = { luring: null, daring: null };
+let selectedMode = "";
+let isSubmitting = false;
+
+const fields = ["nim","nama","prodi","hp","email"];
+
+// ── Mulai fetch kuota SEGERA — sebelum DOM siap sekalipun ──
+// Ini memaksimalkan waktu yang tersedia sambil browser masih render UI
+const kuotaPromise = fetchKuotaRaw();
+
+async function fetchKuotaRaw() {
+  // Cek cache dulu agar tidak perlu round-trip ke Google setiap kali
+  try {
+    const cached = sessionStorage.getItem(CACHE_KEY);
+    if (cached) {
+      const { data, ts } = JSON.parse(cached);
+      if (Date.now() - ts < CACHE_TTL) return data; // pakai cache jika masih fresh
+    }
+  } catch(e) {}
+
+  // Fetch ke Apps Script
+  const res  = await fetch(SHEET_URL + "?action=getKuota");
+  const data = await res.json();
+
+  // Simpan ke cache
+  try {
+    sessionStorage.setItem(CACHE_KEY, JSON.stringify({ data, ts: Date.now() }));
+  } catch(e) {}
+
+  return data;
+}
+
+// ============================================================
+// LOAD KUOTA — dipanggil saat DOM siap, pakai hasil promise
+// yang sudah mulai berjalan sejak script pertama dieksekusi
+// ============================================================
+async function loadKuota() {
+  try {
+    const data = await kuotaPromise; // hasilnya sudah hampir/sudah siap
+    kuota.luring = parseInt(data.luring) || 0;
+    kuota.daring = parseInt(data.daring) || 0;
+    renderKuota();
+  } catch (e) {
+    // Jika gagal, sembunyikan loading dan anggap tersedia
+    ["Luring","Daring"].forEach(cap => {
+      document.getElementById("loading" + cap).style.display   = "none";
+      document.getElementById("kuotaInfo" + cap).style.display = "block";
+    });
+    kuota.luring = 0;
+    kuota.daring = 0;
+    renderKuota();
+  }
+}
+
+function renderKuota() {
+  renderKuotaCard("luring", kuota.luring, KUOTA_LURING);
+  renderKuotaCard("daring", kuota.daring, KUOTA_DARING);
+  renderModeOptions();
+}
+
+function renderKuotaCard(mode, terisi, max) {
+  const sisa    = max - terisi;
+  const pct     = Math.min((terisi / max) * 100, 100);
+  const penuh   = sisa <= 0;
+  const hampir  = !penuh && pct >= 80;
+
+  const Cap = mode.charAt(0).toUpperCase() + mode.slice(1);
+
+  // Loading → hide, info → show
+  document.getElementById("loading" + Cap).style.display    = "none";
+  document.getElementById("kuotaInfo" + Cap).style.display  = "block";
+
+  // Sisa
+  const sisaEl = document.getElementById("sisa" + Cap);
+  sisaEl.textContent = penuh ? "PENUH" : sisa.toLocaleString("id-ID");
+  sisaEl.className   = "kuota-sisa" + (penuh ? " penuh" : hampir ? " hampir" : "");
+
+  // Progress bar
+  const fillEl = document.getElementById("fill" + Cap);
+  fillEl.style.width = pct + "%";
+  fillEl.className   = "kuota-fill" + (penuh ? " penuh" : hampir ? " hampir" : "");
+
+  // Badge
+  const badge = document.getElementById("badge" + Cap);
+  if (penuh) {
+    badge.textContent = "Penuh";
+    badge.className   = "kuota-badge penuh";
+  } else if (hampir) {
+    badge.textContent = "Hampir Penuh";
+    badge.className   = "kuota-badge hampir";
+  } else {
+    badge.textContent = "Tersedia";
+    badge.className   = "kuota-badge tersedia";
+  }
+}
+
+function renderModeOptions() {
+  ["luring","daring"].forEach(mode => {
+    const max    = mode === "luring" ? KUOTA_LURING : KUOTA_DARING;
+    const terisi = kuota[mode];
+    const sisa   = max - terisi;
+    const penuh  = sisa <= 0;
+    const Cap    = mode.charAt(0).toUpperCase() + mode.slice(1);
+    const optEl  = document.getElementById("opt" + Cap);
+    const tagEl  = document.getElementById("tag" + Cap);
+
+    if (penuh) {
+      optEl.classList.add("disabled");
+      optEl.classList.remove("selected");
+      tagEl.textContent = "Kuota Penuh";
+      if (selectedMode === mode) {
+        selectedMode = "";
+        updateProgress();
+        updateSubmitBtn();
+      }
+    } else {
+      optEl.classList.remove("disabled");
+      tagEl.textContent = "Sisa " + sisa.toLocaleString("id-ID") + " kursi";
+    }
+  });
+}
+
+// ============================================================
+// FIELD HANDLERS
+// ============================================================
+function setFocused(cardId) {
+  document.getElementById(cardId).classList.add("focused");
+}
+function clearFocused(cardId) {
+  setTimeout(() => document.getElementById(cardId).classList.remove("focused"), 150);
+}
+
+function onFieldInput(field) {
+  // Reset pesan error NIM duplikat jika user mengetik ulang
+  if (field === "nim") {
+    document.getElementById("errNim").textContent = "NIM tidak boleh kosong";
+  }
+  validateField(field, false);
+  updateProgress();
+  updateSubmitBtn();
+}
+
+function validateField(field, showErr) {
+  const id    = "input" + field.charAt(0).toUpperCase() + field.slice(1);
+  const errId = "err"   + field.charAt(0).toUpperCase() + field.slice(1);
+  const cardId= "card"  + field.charAt(0).toUpperCase() + field.slice(1);
+  const val   = document.getElementById(id).value.trim();
+  let ok = true;
+
+  if (field === "hp")    ok = val.length >= 10 && /^[0-9+\-\s]+$/.test(val);
+  else if (field === "email") ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+  else ok = val.length > 0;
+
+  const card = document.getElementById(cardId);
+  const err  = document.getElementById(errId);
+  const inp  = document.getElementById(id);
+
+  if (!ok && showErr) {
+    card.classList.add("error"); card.classList.remove("filled","focused");
+    err.classList.add("show"); inp.classList.add("has-error");
+  } else if (ok) {
+    card.classList.remove("error"); card.classList.add("filled");
+    err.classList.remove("show"); inp.classList.remove("has-error");
+  } else {
+    card.classList.remove("error","filled");
+    err.classList.remove("show"); inp.classList.remove("has-error");
+  }
+  return ok;
+}
+
+function selectMode(mode) {
+  const el = document.getElementById("opt" + mode.charAt(0).toUpperCase() + mode.slice(1));
+  if (el.classList.contains("disabled")) return;
+  selectedMode = mode;
+  document.getElementById("optLuring").classList.toggle("selected", mode === "luring");
+  document.getElementById("optDaring").classList.toggle("selected", mode === "daring");
+  document.getElementById("errMode").classList.remove("show");
+  document.getElementById("cardMode").classList.remove("error");
+  updateProgress();
+  updateSubmitBtn();
+}
+
+// ============================================================
+// PROGRESS & SUBMIT BTN
+// ============================================================
+function getFieldValues() {
+  return {
+    nim:   document.getElementById("inputNim").value.trim(),
+    nama:  document.getElementById("inputNama").value.trim(),
+    prodi: document.getElementById("inputProdi").value.trim(),
+    hp:    document.getElementById("inputHp").value.trim(),
+    email: document.getElementById("inputEmail").value.trim(),
+  };
+}
+
+function countFilled() {
+  const v = getFieldValues();
+  let n = 0;
+  if (v.nim.length > 0) n++;
+  if (v.nama.length > 0) n++;
+  if (v.prodi.length > 0) n++;
+  if (v.hp.length >= 10) n++;
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email)) n++;
+  if (selectedMode) n++;
+  return n;
+}
+
+function updateProgress() {
+  const n = countFilled();
+  document.getElementById("progressCount").textContent = n + " / 6";
+  document.getElementById("progressFill").style.width  = (n / 6 * 100) + "%";
+}
+
+function updateSubmitBtn() {
+  const ok  = countFilled() === 6;
+  const btn = document.getElementById("submitBtn");
+  const hint= document.getElementById("submitHint");
+  btn.disabled = !ok;
+  if (ok) {
+    hint.textContent = "Semua isian lengkap. Siap mendaftar!";
+    hint.style.color = "#1A7F4B";
+  } else {
+    const rem = 6 - countFilled();
+    hint.textContent = "Lengkapi " + rem + " isian lagi untuk mendaftar";
+    hint.style.color = "var(--text-muted)";
+  }
+}
+
+// ============================================================
+// SUBMIT
+// ============================================================
+async function submitForm() {
+  if (isSubmitting) return;
+
+  // Validasi semua field
+  let allOk = true;
+  fields.forEach(f => { if (!validateField(f, true)) allOk = false; });
+  if (!selectedMode) {
+    document.getElementById("errMode").classList.add("show");
+    document.getElementById("cardMode").classList.add("error");
+    allOk = false;
+  }
+  if (!allOk) {
+    showToast("Periksa kembali isian yang belum lengkap", true);
+    return;
+  }
+
+  // ── Kunci tombol SEKARANG sebelum operasi apapun ──
+  // Mencegah double-submit akibat klik ganda saat ada jeda network
+  isSubmitting = true;
+  document.getElementById("submitBtn").disabled      = true;
+  document.getElementById("spinner").style.display   = "block";
+  document.getElementById("submitLabel").textContent  = "Memeriksa data...";
+
+  const v = getFieldValues();
+
+  // Cek kuota + NIM duplikat real-time sebelum submit
+  // (paksa bypass cache agar data selalu fresh saat submit)
+  try {
+    sessionStorage.removeItem(CACHE_KEY); // invalidate cache sebelum cek
+    const data = await fetchKuotaRaw();
+    kuota.luring = parseInt(data.luring) || 0;
+    kuota.daring = parseInt(data.daring) || 0;
+    renderKuota();
+
+    // Cek NIM duplikat
+    if (data.nimList && data.nimList.includes(v.nim)) {
+      showToast("NIM " + v.nim + " sudah terdaftar sebelumnya!", true);
+      document.getElementById("cardNim").classList.add("error");
+      document.getElementById("errNim").textContent = "NIM ini sudah terdaftar. Setiap mahasiswa hanya bisa mendaftar 1 kali.";
+      document.getElementById("errNim").classList.add("show");
+      document.getElementById("inputNim").classList.add("has-error");
+      resetSubmitBtn(); return;
+    }
+
+    const max    = selectedMode === "luring" ? KUOTA_LURING : KUOTA_DARING;
+    const terisi = kuota[selectedMode];
+    if (terisi >= max) {
+      showToast("Maaf, kuota " + selectedMode + " baru saja penuh!", true);
+      resetSubmitBtn(); return;
+    }
+  } catch(e) { /* lanjut jika tidak bisa cek */ }
+
+  document.getElementById("submitLabel").textContent = "Mendaftarkan...";
+  const payload = {
+    action:    "daftar",
+    timestamp: new Date().toLocaleString("id-ID", { timeZone: "Asia/Jakarta" }),
+    nim:       v.nim,
+    nama:      v.nama,
+    prodi:     v.prodi,
+    hp:        v.hp,
+    email:     v.email,
+    mode:      selectedMode.charAt(0).toUpperCase() + selectedMode.slice(1)
+  };
+
+  try {
+    const res  = await fetch(SHEET_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+
+    if (data.status === "ok") {
+      sessionStorage.removeItem(CACHE_KEY); // paksa refresh kuota untuk pengunjung berikutnya
+      showSuccess(payload, data.no);
+    } else if (data.status === "nim_duplikat") {
+      showToast("NIM " + v.nim + " sudah terdaftar sebelumnya!", true);
+      document.getElementById("cardNim").classList.add("error");
+      document.getElementById("errNim").textContent = "NIM ini sudah terdaftar. Setiap mahasiswa hanya bisa mendaftar 1 kali.";
+      document.getElementById("errNim").classList.add("show");
+      document.getElementById("inputNim").classList.add("has-error");
+    } else if (data.status === "penuh") {
+      showToast("Maaf, kuota " + selectedMode + " sudah penuh!", true);
+      kuota[selectedMode] = data.mode === "luring" ? KUOTA_LURING : KUOTA_DARING;
+      renderKuota();
+      selectedMode = "";
+      document.getElementById("optLuring").classList.remove("selected");
+      document.getElementById("optDaring").classList.remove("selected");
+      updateProgress(); updateSubmitBtn();
+    } else {
+      throw new Error(data.message || "Unknown error");
+    }
+  } catch (err) {
+    console.error(err);
+    showToast("Gagal mengirim. Periksa koneksi & coba lagi.", true);
+  } finally {
+    resetSubmitBtn();
+  }
+}
+
+// ── Reset tombol submit ke kondisi semula ──
+function resetSubmitBtn() {
+  isSubmitting = false;
+  document.getElementById("spinner").style.display   = "none";
+  document.getElementById("submitLabel").textContent  = "Daftar Sekarang \u{1F3A4}";
+  document.getElementById("submitBtn").disabled       = countFilled() < 6;
+}
+function showSuccess(p, no) {
+  const modeLabel = p.mode === "Luring"
+    ? "\u{1F3EB} Luring (Tatap Muka)"
+    : "\u{1F4BB} Daring (Online)";
+  document.getElementById("successDetail").innerHTML = [
+    { label: "No. Pendaftaran", val: "#" + String(no).padStart(4,"0"), hl: true },
+    { label: "NIM",             val: p.nim },
+    { label: "Nama",            val: p.nama },
+    { label: "Program Studi",   val: p.prodi },
+    { label: "Nomor HP",        val: p.hp },
+    { label: "Email",           val: p.email },
+    { label: "Mode Pelatihan",  val: modeLabel, hl: true },
+  ].map(r =>
+    '<div class="success-row' + (r.hl ? " highlight" : "") + '">' +
+    '<span class="success-row-label">' + r.label + '</span>' +
+    '<span class="success-row-val">'   + r.val   + '</span></div>'
+  ).join("");
+
+  document.getElementById("formView").style.display    = "none";
+  document.getElementById("successView").style.display = "block";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+function showToast(msg, isError, isWarn) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "toast show" + (isError ? " error" : isWarn ? " warn" : "");
+  setTimeout(() => { t.className = "toast" + (isError ? " error" : isWarn ? " warn" : ""); }, 4000);
+}
+
+// ============================================================
+// INIT
+// ============================================================
+window.selectMode   = selectMode;
+window.submitForm   = submitForm;
+window.onFieldInput = onFieldInput;
+window.setFocused   = setFocused;
+window.clearFocused = clearFocused;
+
+
+loadKuota();
+updateProgress();
+updateSubmitBtn();
+/* ]]> */
+</script>
+</body>
+</html>
