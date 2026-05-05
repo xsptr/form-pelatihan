@@ -141,7 +141,6 @@
 
   .field-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700; color: var(--orange-dark); margin-bottom: 4px; }
   .field-title { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 700; color: var(--blue); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
-  .field-title p { font-size: .72rem; margin-bottom: 0; font-weight: 400;}
   .required { color: var(--danger); font-family: 'DM Sans', sans-serif; font-size: 14px; }
 
   input[type="text"], input[type="email"], input[type="tel"] {
@@ -496,35 +495,69 @@
 <div class="toast" id="toast"></div>
 
 <script>
+  /* <![CDATA[ */
 // ============================================================
 // KONFIGURASI
 // ============================================================
 const SHEET_URL    = "https://script.google.com/macros/s/AKfycbyjARBMBOyNUdxdDHbjik9OQZJkYwBGjBwIipRDCloO3XVWWB3cNrM9BQEF4H5zRdaYYw/exec";
 const KUOTA_LURING = 75;    // ← ubah angka ini jika kuota ditambah/dikurangi
 const KUOTA_DARING = 1000;  // ← ubah angka ini jika kuota ditambah/dikurangi
+const CACHE_KEY    = "kuota_cache";
+const CACHE_TTL    = 60000; // cache berlaku 60 detik
 
 // ── State ──
-let kuota = { luring: null, daring: null }; // null = belum dimuat
+let kuota = { luring: null, daring: null };
 let selectedMode = "";
 let isSubmitting = false;
 
 const fields = ["nim","nama","prodi","hp","email"];
 
+// ── Mulai fetch kuota SEGERA — sebelum DOM siap sekalipun ──
+// Ini memaksimalkan waktu yang tersedia sambil browser masih render UI
+const kuotaPromise = fetchKuotaRaw();
+
+async function fetchKuotaRaw() {
+  // Cek cache dulu agar tidak perlu round-trip ke Google setiap kali
+  try {
+    const cached = sessionStorage.getItem(CACHE_KEY);
+    if (cached) {
+      const { data, ts } = JSON.parse(cached);
+      if (Date.now() - ts < CACHE_TTL) return data; // pakai cache jika masih fresh
+    }
+  } catch(e) {}
+
+  // Fetch ke Apps Script
+  const res  = await fetch(SHEET_URL + "?action=getKuota");
+  const data = await res.json();
+
+  // Simpan ke cache
+  try {
+    sessionStorage.setItem(CACHE_KEY, JSON.stringify({ data, ts: Date.now() }));
+  } catch(e) {}
+
+  return data;
+}
+
 // ============================================================
-// LOAD KUOTA (GET ke Apps Script)
+// LOAD KUOTA — dipanggil saat DOM siap, pakai hasil promise
+// yang sudah mulai berjalan sejak script pertama dieksekusi
 // ============================================================
 async function loadKuota() {
   try {
-    const res  = await fetch(SHEET_URL + "?action=getKuota");
-    const data = await res.json();
+    const data = await kuotaPromise; // hasilnya sudah hampir/sudah siap
     kuota.luring = parseInt(data.luring) || 0;
     kuota.daring = parseInt(data.daring) || 0;
+    renderKuota();
   } catch (e) {
-    // Jika gagal, anggap masih tersedia (fail-safe)
+    // Jika gagal, sembunyikan loading dan anggap tersedia
+    ["Luring","Daring"].forEach(cap => {
+      document.getElementById("loading" + cap).style.display   = "none";
+      document.getElementById("kuotaInfo" + cap).style.display = "block";
+    });
     kuota.luring = 0;
     kuota.daring = 0;
+    renderKuota();
   }
-  renderKuota();
 }
 
 function renderKuota() {
@@ -720,19 +753,20 @@ async function submitForm() {
     return;
   }
 
-  // — Kunci tombol Submit —
+  // ── Kunci tombol SEKARANG sebelum operasi apapun ──
   // Mencegah double-submit akibat klik ganda saat ada jeda network
-    isSubmitting = true;
-  document.getElementById("spinner").style.display  = "block";
-  document.getElementById("submitLabel").textContent = "Mendaftarkan...";
+  isSubmitting = true;
   document.getElementById("submitBtn").disabled      = true;
+  document.getElementById("spinner").style.display   = "block";
+  document.getElementById("submitLabel").textContent  = "Memeriksa data...";
 
-    const v = getFieldValues();
+  const v = getFieldValues();
 
-  // Cek kuota real-time sekali lagi sebelum submit
+  // Cek kuota + NIM duplikat real-time sebelum submit
+  // (paksa bypass cache agar data selalu fresh saat submit)
   try {
-    const res  = await fetch(SHEET_URL + "?action=getKuota");
-    const data = await res.json();
+    sessionStorage.removeItem(CACHE_KEY); // invalidate cache sebelum cek
+    const data = await fetchKuotaRaw();
     kuota.luring = parseInt(data.luring) || 0;
     kuota.daring = parseInt(data.daring) || 0;
     renderKuota();
@@ -740,25 +774,22 @@ async function submitForm() {
     // Cek NIM duplikat
     if (data.nimList && data.nimList.includes(v.nim)) {
       showToast("NIM " + v.nim + " sudah terdaftar sebelumnya!", true);
-      // Highlight field NIM
       document.getElementById("cardNim").classList.add("error");
       document.getElementById("errNim").textContent = "NIM ini sudah terdaftar. Setiap mahasiswa hanya bisa mendaftar 1 kali.";
       document.getElementById("errNim").classList.add("show");
       document.getElementById("inputNim").classList.add("has-error");
-      resetSubmitBtn();
-      return;
+      resetSubmitBtn(); return;
     }
 
     const max    = selectedMode === "luring" ? KUOTA_LURING : KUOTA_DARING;
     const terisi = kuota[selectedMode];
     if (terisi >= max) {
       showToast("Maaf, kuota " + selectedMode + " baru saja penuh!", true);
-      resetSubmitBtn();
-      return;
+      resetSubmitBtn(); return;
     }
   } catch(e) { /* lanjut jika tidak bisa cek */ }
 
-
+  document.getElementById("submitLabel").textContent = "Mendaftarkan...";
   const payload = {
     action:    "daftar",
     timestamp: new Date().toLocaleString("id-ID", { timeZone: "Asia/Jakarta" }),
@@ -771,7 +802,6 @@ async function submitForm() {
   };
 
   try {
-
     const formData = new URLSearchParams(payload);
 
     const res  = await fetch(SHEET_URL, {
@@ -793,6 +823,7 @@ async function submitForm() {
     }
 
     if (data.status === "ok") {
+      sessionStorage.removeItem(CACHE_KEY); // paksa refresh kuota untuk pengunjung berikutnya
       showSuccess(payload, data.no);
     } else if (data.status === "nim_duplikat") {
       showToast("NIM " + v.nim + " sudah terdaftar sebelumnya!", true);
@@ -816,21 +847,16 @@ async function submitForm() {
     showToast("Error: " + err.message, true);
   } finally {
     resetSubmitBtn();
-    
   }
 }
 
-// —— Reset tombol submit ke kondisi semula ——
+// ── Reset tombol submit ke kondisi semula ──
 function resetSubmitBtn() {
-  document.getElementById("spinner").style.display  = "none";
-  document.getElementById("submitLabel").textContent = "Daftar Sekarang \u{1F3A4}";
-  document.getElementById("submitBtn").disabled      = countFilled() < 6;
   isSubmitting = false;
+  document.getElementById("spinner").style.display   = "none";
+  document.getElementById("submitLabel").textContent  = "Daftar Sekarang \u{1F3A4}";
+  document.getElementById("submitBtn").disabled       = countFilled() < 6;
 }
-
-// ============================================================
-// SUCCESS
-// ============================================================
 function showSuccess(p, no) {
   const modeLabel = p.mode === "Luring"
     ? "\u{1F3EB} Luring (Tatap Muka)"
@@ -867,9 +893,17 @@ function showToast(msg, isError, isWarn) {
 // ============================================================
 // INIT
 // ============================================================
+window.selectMode   = selectMode;
+window.submitForm   = submitForm;
+window.onFieldInput = onFieldInput;
+window.setFocused   = setFocused;
+window.clearFocused = clearFocused;
+
+
 loadKuota();
 updateProgress();
 updateSubmitBtn();
+/* ]]> */
 </script>
 </body>
 </html>
