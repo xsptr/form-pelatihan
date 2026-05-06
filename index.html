@@ -270,6 +270,55 @@
   .footer-logo { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--text-muted); font-weight: 500; }
   .footer-dot { width: 6px; height: 6px; background: var(--orange); border-radius: 50%; display: inline-block; }
 
+  /* ── WAKTU PELAKSANAAN ── */
+  .event-card {
+    background: linear-gradient(135deg, rgba(0,86,210,0.06), rgba(255,157,27,0.05));
+    border: 1.5px solid rgba(0,86,210,0.18);
+    border-radius: 16px; padding: 18px 20px;
+    margin-bottom: 28px;
+    animation: fadeDown 0.7s ease 0.04s both;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+  .event-item {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .event-icon-wrap {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: var(--surface); border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .event-item-label { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 3px; }
+  .event-item-val { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.3; }
+
+  /* ── STATUS PILIHAN (Mahasiswa/Alumni) ── */
+  .status-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .status-option {
+    border: 2px solid var(--border); border-radius: 14px;
+    padding: 14px 12px; cursor: pointer;
+    transition: all 0.22s ease; position: relative;
+    background: var(--white); text-align: center;
+    user-select: none;
+  }
+  .status-option:hover { transform: translateY(-2px); }
+  .status-option.mahasiswa:hover { border-color: rgba(0,86,210,0.4); box-shadow: 0 6px 20px rgba(0,86,210,0.1); }
+  .status-option.alumni:hover { border-color: rgba(255,157,27,0.5); box-shadow: 0 6px 20px rgba(255,157,27,0.12); }
+  .status-option.selected.mahasiswa { border-color: var(--blue); background: rgba(0,86,210,0.04); box-shadow: 0 4px 20px rgba(0,86,210,0.12); }
+  .status-option.selected.alumni { border-color: var(--orange); background: rgba(255,157,27,0.05); box-shadow: 0 4px 20px rgba(255,157,27,0.15); }
+  .status-check {
+    position: absolute; top: 10px; right: 10px;
+    width: 20px; height: 20px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; opacity: 0; transition: opacity 0.2s;
+  }
+  .status-option.selected.mahasiswa .status-check { background: var(--blue); color: #fff; opacity: 1; }
+  .status-option.selected.alumni .status-check { background: var(--orange); color: #fff; opacity: 1; }
+  .status-emoji { font-size: 26px; display: block; margin-bottom: 6px; line-height: 1; }
+  .status-name { font-weight: 700; font-size: 13.5px; margin-bottom: 2px; }
+  .status-option.mahasiswa .status-name { color: var(--blue); }
+  .status-option.alumni .status-name { color: var(--orange-dark); }
+  .status-desc { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+
   /* ── PENDAFTARAN DITUTUP ── */
   .closed-card {
     background: var(--surface); border: 2px solid var(--danger-border);
@@ -328,6 +377,24 @@
       <div class="divider"></div>
     </div>
 
+    <!-- Waktu Pelaksanaan -->
+    <div class="event-card">
+      <div class="event-item">
+        <div class="event-icon-wrap">&#128197;</div>
+        <div>
+          <div class="event-item-label">Tanggal</div>
+          <div class="event-item-val">Jumat, 9 Mei 2026</div>
+        </div>
+      </div>
+      <div class="event-item">
+        <div class="event-icon-wrap">&#128336;</div>
+        <div>
+          <div class="event-item-label">Waktu</div>
+          <div class="event-item-val">08.00 &#8212; 12.00 WIB</div>
+        </div>
+      </div>
+    </div>
+
     <!-- Kuota Banner -->
     <div class="kuota-banner">
       <!-- Luring -->
@@ -374,7 +441,7 @@
     <div class="form-progress">
       <div class="form-progress-header">
         <span class="form-progress-label">Kelengkapan formulir</span>
-        <span class="form-progress-count" id="progressCount">0 / 6</span>
+        <span class="form-progress-count" id="progressCount">0 / 7</span>
       </div>
       <div class="form-progress-bar">
         <div class="form-progress-fill" id="progressFill"></div>
@@ -434,6 +501,27 @@
           oninput="onFieldInput('email')"
           onfocus="setFocused('cardEmail')" onblur="clearFocused('cardEmail')" />
         <div class="field-error" id="errEmail">Masukkan alamat email yang valid</div>
+      </div>
+
+      <!-- Status -->
+      <div class="form-card" id="cardStatus">
+        <div class="field-label">Identitas Peserta</div>
+        <div class="field-title">Status <span class="required">*</span></div>
+        <div class="status-options">
+          <div class="status-option mahasiswa" id="optMahasiswa" onclick="selectStatus('mahasiswa')">
+            <div class="status-check">&#10003;</div>
+            <span class="status-emoji">&#127979;</span>
+            <div class="status-name">Mahasiswa</div>
+            <div class="status-desc">Terdaftar aktif di UT</div>
+          </div>
+          <div class="status-option alumni" id="optAlumni" onclick="selectStatus('alumni')">
+            <div class="status-check">&#10003;</div>
+            <span class="status-emoji">&#127891;</span>
+            <div class="status-name">Alumni</div>
+            <div class="status-desc">Lulusan Universitas Terbuka</div>
+          </div>
+        </div>
+        <div class="field-error" id="errStatus">Pilih status kamu</div>
       </div>
 
       <!-- Mode -->
@@ -507,8 +595,9 @@ const CACHE_TTL    = 60000; // cache berlaku 60 detik
 
 // ── State ──
 let kuota = { luring: null, daring: null };
-let selectedMode = "";
-let isSubmitting = false;
+let selectedMode   = "";
+let selectedStatus = "";
+let isSubmitting   = false;
 
 const fields = ["nim","nama","prodi","hp","email"];
 
@@ -688,6 +777,16 @@ function selectMode(mode) {
   updateSubmitBtn();
 }
 
+function selectStatus(status) {
+  selectedStatus = status;
+  document.getElementById("optMahasiswa").classList.toggle("selected", status === "mahasiswa");
+  document.getElementById("optAlumni").classList.toggle("selected", status === "alumni");
+  document.getElementById("errStatus").classList.remove("show");
+  document.getElementById("cardStatus").classList.remove("error");
+  updateProgress();
+  updateSubmitBtn();
+}
+
 // ============================================================
 // PROGRESS & SUBMIT BTN
 // ============================================================
@@ -709,18 +808,19 @@ function countFilled() {
   if (v.prodi.length > 0) n++;
   if (v.hp.length >= 10) n++;
   if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.email)) n++;
+  if (selectedStatus) n++;
   if (selectedMode) n++;
   return n;
 }
 
 function updateProgress() {
   const n = countFilled();
-  document.getElementById("progressCount").textContent = n + " / 6";
-  document.getElementById("progressFill").style.width  = (n / 6 * 100) + "%";
+  document.getElementById("progressCount").textContent = n + " / 7";
+  document.getElementById("progressFill").style.width  = (n / 7 * 100) + "%";
 }
 
 function updateSubmitBtn() {
-  const ok  = countFilled() === 6;
+  const ok  = countFilled() === 7;
   const btn = document.getElementById("submitBtn");
   const hint= document.getElementById("submitHint");
   btn.disabled = !ok;
@@ -728,7 +828,7 @@ function updateSubmitBtn() {
     hint.textContent = "Semua isian lengkap. Siap mendaftar!";
     hint.style.color = "#1A7F4B";
   } else {
-    const rem = 6 - countFilled();
+    const rem = 7 - countFilled();
     hint.textContent = "Lengkapi " + rem + " isian lagi untuk mendaftar";
     hint.style.color = "var(--text-muted)";
   }
@@ -743,6 +843,11 @@ async function submitForm() {
   // Validasi semua field
   let allOk = true;
   fields.forEach(f => { if (!validateField(f, true)) allOk = false; });
+  if (!selectedStatus) {
+    document.getElementById("errStatus").classList.add("show");
+    document.getElementById("cardStatus").classList.add("error");
+    allOk = false;
+  }
   if (!selectedMode) {
     document.getElementById("errMode").classList.add("show");
     document.getElementById("cardMode").classList.add("error");
@@ -798,6 +903,7 @@ async function submitForm() {
     prodi:     v.prodi,
     hp:        v.hp,
     email:     v.email,
+    status:    selectedStatus.charAt(0).toUpperCase() + selectedStatus.slice(1),
     mode:      selectedMode.charAt(0).toUpperCase() + selectedMode.slice(1)
   };
 
@@ -854,17 +960,17 @@ async function submitForm() {
 function resetSubmitBtn() {
   isSubmitting = false;
   document.getElementById("spinner").style.display   = "none";
-  document.getElementById("submitLabel").textContent  = "Daftar Sekarang \u{1F3A4}";
-  document.getElementById("submitBtn").disabled       = countFilled() < 6;
+  document.getElementById("submitLabel").textContent  = "Daftar Sekarang \uD83C\uDFA4";
+  document.getElementById("submitBtn").disabled       = countFilled() < 7;
 }
 function showSuccess(p, no) {
-  const modeLabel = p.mode === "Luring"
-    ? "\u{1F3EB} Luring (Tatap Muka)"
-    : "\u{1F4BB} Daring (Online)";
+  const modeLabel   = p.mode === "Luring" ? "\uD83C\uDFEB Luring (Tatap Muka)" : "\uD83D\uDCBB Daring (Online)";
+  const statusLabel = p.status === "Mahasiswa" ? "\uD83C\uDFEB Mahasiswa" : "\uD83C\uDF93 Alumni";
   document.getElementById("successDetail").innerHTML = [
     { label: "No. Pendaftaran", val: "#" + String(no).padStart(4,"0"), hl: true },
     { label: "NIM",             val: p.nim },
     { label: "Nama",            val: p.nama },
+    { label: "Status",          val: statusLabel },
     { label: "Program Studi",   val: p.prodi },
     { label: "Nomor HP",        val: p.hp },
     { label: "Email",           val: p.email },
@@ -894,6 +1000,7 @@ function showToast(msg, isError, isWarn) {
 // INIT
 // ============================================================
 window.selectMode   = selectMode;
+window.selectStatus = selectStatus;
 window.submitForm   = submitForm;
 window.onFieldInput = onFieldInput;
 window.setFocused   = setFocused;
