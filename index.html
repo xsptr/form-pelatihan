@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pendaftaran Pelatihan Public Speaking — UT Bandung</title>
+<title>Pendaftaran Pelatihan Digital Marketing — UT Bandung</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -266,9 +266,29 @@
 
   .success-note { background: var(--success-bg); border: 1.5px solid var(--success-border); border-radius: 12px; padding: 14px 18px; font-size: 13.5px; color: var(--success); max-width: 460px; margin: 0 auto; line-height: 1.6; }
 
+    /* Logo UT Bandung di success view */
+  .success-logo-wrap {
+    display: flex; align-items: center; justify-content: center;
+    animation: pop 0.5s cubic-bezier(0.175 , 0.885, 0.32, 1.275) 0.15s both;
+  }
+
+  .success-logo-img {
+    height: 150px; width: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 16px rgba(0,86,210,0.15));
+  }
+
   /* ── FOOTER ── */
   .footer-brand { text-align: center; margin-top: 48px; padding-top: 22px; border-top: 1px solid var(--border); animation: fadeDown 0.7s ease 0.36s both; }
   .footer-logo { display: inline-flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--text-muted); font-weight: 500; }
+
+    /* Logo UT Bandung */
+  .footer-logo-img {
+    display: block; margin: 0 auto 10px;
+    height: 150px; width: auto;
+    object-fit: contain;
+  }
+
   .footer-dot { width: 6px; height: 6px; background: var(--orange); border-radius: 50%; display: inline-block; }
 
   /* ── WAKTU PELAKSANAAN ── */
@@ -332,6 +352,59 @@
   .closed-divider { width: 40px; height: 2px; background: var(--danger-border); margin: 16px auto; border-radius: 100px; }
 
   /* ── ANIMATIONS ── */
+  /* ── MODAL KONSEKUENSI LURING ── */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(13,26,46,0.55);
+    backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .modal-overlay.show { opacity: 1; pointer-events: auto; }
+
+  .modal-box {
+    background: var(--surface); border-radius: 22px;
+    max-width: 420px; width: 100%;
+    box-shadow: 0 24px 64px rgba(13,26,46,0.25);
+    overflow: hidden;
+    transform: scale(0.92) translateY(16px);
+    transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  .modal-overlay.show .modal-box { transform: scale(1) translateY(0); }
+
+  .modal-top {
+    background: linear-gradient(135deg, var(--orange-dark), var(--orange));
+    padding: 24px 24px 20px; text-align: center;
+  }
+  .modal-icon { font-size: 38px; display: block; margin-bottom: 10px; }
+  .modal-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 900; color: #fff; line-height: 1.2; }
+
+  .modal-body { padding: 22px 24px; }
+  .modal-msg {
+    font-size: 14px; color: var(--text); line-height: 1.75;
+    background: var(--warn-bg); border: 1.5px solid var(--warn-border);
+    border-radius: 12px; padding: 14px 16px; margin-bottom: 20px;
+  }
+  .modal-msg strong { color: var(--orange-dark); }
+
+  .modal-actions { display: flex; gap: 10px; }
+  .modal-btn {
+    flex: 1; padding: 13px; border: none; border-radius: 12px;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 700;
+    cursor: pointer; transition: opacity 0.2s, transform 0.15s;
+  }
+  .modal-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+  .modal-btn.agree {
+    background: linear-gradient(135deg, var(--blue-dark), var(--blue));
+    color: #fff; box-shadow: 0 4px 16px rgba(0,86,210,0.25);
+  }
+  .modal-btn.cancel {
+    background: var(--surface2); color: var(--text-muted);
+    border: 1.5px solid var(--border);
+  }
+
   @keyframes fadeDown { from { opacity: 0; transform: translateY(-14px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes pop { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -355,7 +428,7 @@
   ╚══════════════════════════════════════════════════════════════╝
 
    -->
-  <div class="closed-card">
+  <!-- <div class="closed-card">
     <span class="closed-icon">🔒</span>
     <div class="closed-title">Pendaftaran Ditutup</div>
     <div class="closed-divider"></div>
@@ -365,16 +438,16 @@
       selanjutnya melalui website dan media sosial UT Bandung.
       Terima kasih atas antusiasme kalian! 🙏
     </p>
-  </div>
+  </div> -->
 
    <!-- ══ FORM VIEW ══ -->
-  <div id="formView" style="display: none;">
+  <div id="formView">
 
     <!-- Header -->
     <div class="header">
       <div class="header-badge">&#127908; Pelatihan Mahasiswa UT Bandung</div>
-      <h1>Pendaftaran<br><span>Pelatihan Public Speaking</span></h1>
-      <p class="header-sub">From Nervous to Impactful: Taklukan Grogi, Tampil Percaya Diri</p>
+      <h1>Pendaftaran<br><span>Pelatihan Digital Marketing</span></h1>
+      <!-- <p class="header-sub">From Nervous to Impactful: Taklukan Grogi, Tampil Percaya Diri</p> -->
       <div class="divider"></div>
     </div>
 
@@ -384,14 +457,14 @@
         <div class="event-icon-wrap">&#128197;</div>
         <div>
           <div class="event-item-label">Tanggal</div>
-          <div class="event-item-val">Sabtu, 9 Mei 2026</div>
+          <div class="event-item-val">Sabtu, 23 Mei 2026</div>
         </div>
       </div>
       <div class="event-item">
         <div class="event-icon-wrap">&#128336;</div>
         <div>
           <div class="event-item-label">Waktu</div>
-          <div class="event-item-val">08.00 &#8212; 12.00 WIB</div>
+          <div class="event-item-val">13.00 &#8212; 16.30 WIB</div>
         </div>
       </div>
     </div>
@@ -409,7 +482,7 @@
         </div>
         <div id="kuotaInfoLuring" style="display:none">
           <div class="kuota-sisa" id="sisaLuring">—</div>
-          <div class="kuota-label">sisa dari 90 kursi</div>
+          <div class="kuota-label">sisa dari 125 kursi</div>
           <div class="kuota-bar"><div class="kuota-fill" id="fillLuring" style="width:0%"></div></div>
         </div>
       </div>
@@ -424,7 +497,7 @@
         </div>
         <div id="kuotaInfoDaring" style="display:none">
           <div class="kuota-sisa" id="sisaDaring">—</div>
-          <div class="kuota-label">sisa dari 1.000 kursi</div>
+          <div class="kuota-label">sisa dari 500 kursi</div>
           <div class="kuota-bar"><div class="kuota-fill" id="fillDaring" style="width:0%"></div></div>
         </div>
       </div>
@@ -467,7 +540,7 @@
       <div class="form-card" id="cardNama">
         <div class="field-label">Identitas</div>
         <div class="field-title">Nama Lengkap <span class="required">*</span></div>
-        <input type="text" id="inputNama" placeholder="Sesuai KTP / Kartu Mahasiswa"
+        <input type="text" id="inputNama" placeholder="Tuliskan Nama Lengkap Anda"
           oninput="onFieldInput('nama')"
           onfocus="setFocused('cardNama')" onblur="clearFocused('cardNama')" />
         <div class="field-error" id="errNama">Nama tidak boleh kosong</div>
@@ -535,7 +608,7 @@
             <span class="mode-emoji">&#127979;</span>
             <div class="mode-name">Luring</div>
             <div class="mode-desc">Hadir langsung di kampus UT Bandung</div>
-            <div class="mode-kuota-tag" id="tagLuring">Maks. 90 peserta</div>
+            <div class="mode-kuota-tag" id="tagLuring">Maks. 125 peserta</div>
             <div class="mode-penuh-note">&#128683; Kuota penuh</div>
           </div>
 
@@ -544,7 +617,7 @@
             <span class="mode-emoji">&#128187;</span>
             <div class="mode-name">Daring</div>
             <div class="mode-desc">Ikuti secara online via Zoom / platform digital</div>
-            <div class="mode-kuota-tag" id="tagDaring">Maks. 1.000 peserta</div>
+            <div class="mode-kuota-tag" id="tagDaring">Maks. 500 peserta</div>
             <div class="mode-penuh-note">&#128683; Kuota penuh</div>
           </div>
 
@@ -561,6 +634,7 @@
     <p class="submit-hint" id="submitHint">Lengkapi semua isian untuk mendaftar</p>
 
     <div class="footer-brand">
+      <img src="img/logo-utbdg.png" alt="logo-ut-bandung" class="footer-logo-img" />
       <div class="footer-logo">
         <span class="footer-dot"></span>
         Universitas Terbuka &#8212; UT Bandung
@@ -571,16 +645,38 @@
 
   <!-- ══ SUCCESS VIEW ══ -->
   <div id="successView" class="success-screen">
-    <span class="success-icon">&#127942;</span>
+    <div class="success-logo-wrap">
+      <img src="img/logo-utbdg.png" alt="Logo UT Bandung" class="success-logo-img">
+    </div>
     <div class="success-title">Pendaftaran <span>Berhasil!</span></div>
-    <p class="success-sub" id="successSub">Selamat! Kamu telah terdaftar sebagai peserta pelatihan Public Speaking UT Bandung.</p>
+    <p class="success-sub" id="successSub">Selamat! Kamu telah terdaftar sebagai peserta pelatihan Digital Marketing UT Bandung.</p>
     <div class="success-detail" id="successDetail"></div>
     <div class="success-note">
-      &#10003;&nbsp; Data pendaftaranmu sudah tersimpan. Tim kami akan menghubungimu melalui nomor HP atau email yang didaftarkan. Sampai jumpa di pelatihan! &#128591;
+      &#10003;&nbsp; Data pendaftaranmu sudah tersimpan. Tim kami akan menghubungimu melalui nomor HP yang didaftarkan. Sampai jumpa di pelatihan! &#128591;
     </div>
   </div>
 
 </div><!-- /container -->
+
+<!-- ══ MODAL KONSEKUENSI LURING ══ -->
+<div class="modal-overlay" id="modalKonsekuensi">
+  <div class="modal-box">
+    <div class="modal-top">
+      <span class="modal-icon">&#9888;&#65039;</span>
+      <div class="modal-title">Perhatian Pendaftaran</div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-msg">
+        Berdasarkan data kami, Anda mendaftar pada pelatihan sebelumnya dengan metode <strong>Luring</strong>, namun <strong>tidak hadir</strong> pada saat pelaksanaan.<br><br>
+        Sebagai konsekuensi, Anda <strong>hanya dapat mendaftar mode Daring</strong> pada pelatihan ini.
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn cancel" onclick="tolakKonsekuensi()">&#10005;&nbsp; Tidak Setuju</button>
+        <button class="modal-btn agree"  onclick="setujuKonsekuensi()">&#10003;&nbsp; Setuju, Daftar Daring</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -588,9 +684,21 @@
 // ============================================================
 // KONFIGURASI
 // ============================================================
-const SHEET_URL    = "https://script.google.com/macros/s/AKfycbyjARBMBOyNUdxdDHbjik9OQZJkYwBGjBwIipRDCloO3XVWWB3cNrM9BQEF4H5zRdaYYw/exec";
-const KUOTA_LURING = 90;    // ← ubah angka ini jika kuota ditambah/dikurangi
-const KUOTA_DARING = 1000;  // ← ubah angka ini jika kuota ditambah/dikurangi
+const SHEET_URL    = "https://script.google.com/macros/s/AKfycbw60djeICwQMdChz1ZpbIkOtKalHlfVWrdmp4aP0A_vUEw6caKGrlA8mMvvBQ1qLL-k/exec";
+const KUOTA_LURING = 125;    // ← ubah angka ini jika kuota ditambah/dikurangi
+const KUOTA_DARING = 500;  // ← ubah angka ini jika kuota ditambah/dikurangi
+
+// ============================================================
+// DAFTAR NIM KONSEKUENSI
+// NIM yang daftar luring sebelumnya tapi tidak hadir
+// → hanya boleh daftar daring pada pelatihan ini
+// Tambahkan NIM baru di sini (format string, termasuk angka 0 di depan)
+// ============================================================
+var NIM_KONSEKUENSI = [
+  "041234567",
+  "042345678"
+  // tambahkan NIM lain di sini...
+];
 const CACHE_KEY    = "kuota_cache";
 const CACHE_TTL    = 60000; // cache berlaku 60 detik
 
@@ -599,6 +707,8 @@ let kuota = { luring: null, daring: null };
 let selectedMode   = "";
 let selectedStatus = "";
 let isSubmitting   = false;
+let nimPendaftar            = ""; // menyimpan NIM saat proses submit, diakses modal konsekuensi
+let sudahSetujuKonsekuensi = false; // flag: skip cek konsekuensi saat submit ulang
 
 const fields = ["nim","nama","prodi","hp","email"];
 
@@ -867,6 +977,15 @@ async function submitForm() {
   document.getElementById("submitLabel").textContent  = "Memeriksa data...";
 
   const v = getFieldValues();
+  nimPendaftar = v.nim;
+
+  // Simpan semua nilai ke variabel outer agar tetap tersedia
+  // saat submitForm dipanggil ulang oleh setujuKonsekuensi
+  var vNim   = v.nim;
+  var vNama  = v.nama;
+  var vProdi = v.prodi;
+  var vHp    = v.hp;
+  var vEmail = v.email;
 
   // Cek kuota + NIM duplikat real-time sebelum submit
   // (paksa bypass cache agar data selalu fresh saat submit)
@@ -877,15 +996,27 @@ async function submitForm() {
     kuota.daring = parseInt(data.daring) || 0;
     renderKuota();
 
-    // Cek NIM duplikat
-    if (data.nimList && data.nimList.includes(v.nim)) {
-      showToast("NIM " + v.nim + " sudah terdaftar sebelumnya!", true);
+    // Cek NIM duplikat — normalisasi keduanya ke string agar 0 di depan tidak hilang
+    if (data.nimList && data.nimList.map(function(n){ return String(n).trim(); }).includes(String(vNim).trim())) {
+      showToast("NIM " + nimPendaftar + " sudah terdaftar sebelumnya!", true);
       document.getElementById("cardNim").classList.add("error");
       document.getElementById("errNim").textContent = "NIM ini sudah terdaftar. Setiap mahasiswa hanya bisa mendaftar 1 kali.";
       document.getElementById("errNim").classList.add("show");
       document.getElementById("inputNim").classList.add("has-error");
       resetSubmitBtn(); return;
     }
+
+    // Cek NIM konsekuensi — wajib daring jika masuk daftar
+    // Skip jika user sudah setuju di modal sebelumnya
+    if (!sudahSetujuKonsekuensi &&
+        NIM_KONSEKUENSI.map(function(n){ return String(n).trim(); }).includes(String(vNim).trim())) {
+      if (selectedMode === "luring") {
+        resetSubmitBtn();
+        showModalKonsekuensi();
+        return;
+      }
+    }
+    sudahSetujuKonsekuensi = false;
 
     const max    = selectedMode === "luring" ? KUOTA_LURING : KUOTA_DARING;
     const terisi = kuota[selectedMode];
@@ -933,7 +1064,7 @@ async function submitForm() {
       sessionStorage.removeItem(CACHE_KEY); // paksa refresh kuota untuk pengunjung berikutnya
       showSuccess(payload, data.no);
     } else if (data.status === "nim_duplikat") {
-      showToast("NIM " + v.nim + " sudah terdaftar sebelumnya!", true);
+      showToast("NIM " + nimPendaftar + " sudah terdaftar sebelumnya!", true);
       document.getElementById("cardNim").classList.add("error");
       document.getElementById("errNim").textContent = "NIM ini sudah terdaftar. Setiap mahasiswa hanya bisa mendaftar 1 kali.";
       document.getElementById("errNim").classList.add("show");
@@ -963,6 +1094,40 @@ function resetSubmitBtn() {
   document.getElementById("spinner").style.display   = "none";
   document.getElementById("submitLabel").textContent  = "Daftar Sekarang \uD83C\uDFA4";
   document.getElementById("submitBtn").disabled       = countFilled() < 7;
+}
+
+// ============================================================
+// MODAL KONSEKUENSI LURING
+// ============================================================
+function showModalKonsekuensi() {
+  document.getElementById("modalKonsekuensi").classList.add("show");
+}
+
+function hideModalKonsekuensi() {
+  document.getElementById("modalKonsekuensi").classList.remove("show");
+}
+
+function setujuKonsekuensi() {
+  hideModalKonsekuensi();
+  sudahSetujuKonsekuensi = true; // tandai sudah setuju agar skip cek konsekuensi
+  selectMode("daring");
+  updateProgress();
+  updateSubmitBtn();
+  showToast("Mode diubah ke Daring. Mendaftarkan...", false);
+  setTimeout(function() { submitForm(); }, 400);
+}
+
+function tolakKonsekuensi() {
+  hideModalKonsekuensi();
+  // Kembalikan mode kosong
+  selectedMode = "";
+  document.getElementById("optLuring").classList.remove("selected");
+  document.getElementById("optDaring").classList.remove("selected");
+  document.getElementById("errMode").classList.add("show");
+  document.getElementById("cardMode").classList.add("error");
+  updateProgress();
+  updateSubmitBtn();
+  showToast("Pendaftaran dibatalkan.", false);
 }
 function showSuccess(p, no) {
   const modeLabel   = p.mode === "Luring" ? "\uD83C\uDFEB Luring (Tatap Muka)" : "\uD83D\uDCBB Daring (Online)";
@@ -1000,12 +1165,14 @@ function showToast(msg, isError, isWarn) {
 // ============================================================
 // INIT
 // ============================================================
-window.selectMode   = selectMode;
-window.selectStatus = selectStatus;
-window.submitForm   = submitForm;
-window.onFieldInput = onFieldInput;
-window.setFocused   = setFocused;
-window.clearFocused = clearFocused;
+window.selectMode          = selectMode;
+window.selectStatus        = selectStatus;
+window.submitForm          = submitForm;
+window.onFieldInput        = onFieldInput;
+window.setFocused          = setFocused;
+window.clearFocused        = clearFocused;
+window.setujuKonsekuensi   = setujuKonsekuensi;
+window.tolakKonsekuensi    = tolakKonsekuensi;
 
 
 loadKuota();
