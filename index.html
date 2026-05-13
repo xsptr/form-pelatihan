@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pendaftaran Pelatihan Digital Marketing — UT Bandung</title>
+<title>Pendaftaran Pelatihan Digitalpreneur — UT Bandung</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="shortcut icon" href="img/logo-ut.png" type="image/x-icon">
 <style>
@@ -24,6 +24,7 @@
     --success-bg:  #E8F8EF;
     --success-border:#A8D5BC;
     --danger:      #C0392B;
+    --dangers:      #ff0000;
     --danger-bg:   #FDECEA;
     --danger-border:#F1A8A0;
     --warn-bg:     #FFF8E6;
@@ -376,7 +377,7 @@
   .modal-overlay.show .modal-box { transform: scale(1) translateY(0); }
 
   .modal-top {
-    background: linear-gradient(135deg, var(--orange-dark), var(--orange));
+    background: var(--dangers);
     padding: 24px 24px 20px; text-align: center;
   }
   .modal-icon { font-size: 38px; display: block; margin-bottom: 10px; }
@@ -388,7 +389,7 @@
     background: var(--warn-bg); border: 1.5px solid var(--warn-border);
     border-radius: 12px; padding: 14px 16px; margin-bottom: 20px;
   }
-  .modal-msg strong { color: var(--orange-dark); }
+  .modal-msg strong { color: var(--dangers); }
 
   .modal-actions { display: flex; gap: 10px; }
   .modal-btn {
@@ -429,7 +430,7 @@
   ╚══════════════════════════════════════════════════════════════╝
 
    -->
-  <div class="closed-card">
+  <!-- <div class="closed-card">
     <span class="closed-icon">🔒</span>
     <div class="closed-title">Pendaftaran Ditutup</div>
     <div class="closed-divider"></div>
@@ -439,15 +440,15 @@
       selanjutnya melalui website dan media sosial UT Bandung.
       Terima kasih atas antusiasme kalian! 🙏
     </p>
-  </div>
+  </div> -->
 
    <!-- ══ FORM VIEW ══ -->
-  <div id="formView" style="display: none;">
+  <div id="formView"">
 
     <!-- Header -->
     <div class="header">
       <div class="header-badge">💻 Pelatihan Mahasiswa UT Bandung</div>
-      <h1>Pendaftaran<br><span>Pelatihan Digital Marketing</span></h1>
+      <h1>Pendaftaran<br><span>Pelatihan Digitalpreneur</span></h1>
       <!-- <p class="header-sub">From Nervous to Impactful: Taklukan Grogi, Tampil Percaya Diri</p> -->
       <div class="divider"></div>
     </div>
@@ -650,7 +651,7 @@
       <img src="img/logo-utbdg.png" alt="Logo UT Bandung" class="success-logo-img">
     </div>
     <div class="success-title">Pendaftaran <span>Berhasil!</span></div>
-    <p class="success-sub" id="successSub">Selamat! Kamu telah terdaftar sebagai peserta pelatihan Digital Marketing UT Bandung.</p>
+    <p class="success-sub" id="successSub">Selamat! Kamu telah terdaftar sebagai peserta pelatihan Digitalpreneur UT Bandung.</p>
     <div class="success-detail" id="successDetail"></div>
     <div class="success-note">
       &#10003;&nbsp; Data pendaftaranmu sudah tersimpan. Tim kami akan menghubungimu melalui nomor HP yang didaftarkan. Sampai jumpa di pelatihan! &#128591;
@@ -664,16 +665,16 @@
   <div class="modal-box">
     <div class="modal-top">
       <span class="modal-icon">&#9888;&#65039;</span>
-      <div class="modal-title">Perhatian Pendaftaran</div>
+      <div class="modal-title">Perhatian</div>
     </div>
     <div class="modal-body">
       <div class="modal-msg">
-        Berdasarkan data kami, Anda mendaftar pada pelatihan sebelumnya dengan metode <strong>Luring</strong>, namun <strong>tidak hadir</strong> pada saat pelaksanaan.<br><br>
-        Sebagai konsekuensi, Anda <strong>hanya dapat mendaftar mode Daring</strong> pada pelatihan ini.
+        Berdasarkan data kami, Anda mendaftar pada pelatihan sebelumnya dengan skema <strong>Luring</strong>, namun <strong>tidak hadir secara Luring</strong> pada saat pelaksanaan.<br><br>
+        Sebagai konsekuensi, Anda <strong>hanya dapat mendaftar skema Daring</strong> pada pelatihan ini.
       </div>
       <div class="modal-actions">
         <button class="modal-btn cancel" onclick="tolakKonsekuensi()">&#10005;&nbsp; Tidak Setuju</button>
-        <button class="modal-btn agree"  onclick="setujuKonsekuensi()">&#10003;&nbsp; Setuju, Daftar Daring</button>
+        <button class="modal-btn agree"  onclick="setujuKonsekuensi()">&#10003;&nbsp; Setuju, Daftar Skema Daring</button>
       </div>
     </div>
   </div>
