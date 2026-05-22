@@ -1,9 +1,14 @@
 // ============================================================
 // KONFIGURASI
 // ============================================================
-const SHEET_URL    = "https://script.google.com/macros/s/AKfycbw60djeICwQMdChz1ZpbIkOtKalHlfVWrdmp4aP0A_vUEw6caKGrlA8mMvvBQ1qLL-k/exec";
-const KUOTA_LURING = 125;    // ← ubah angka ini jika kuota ditambah/dikurangi
-const KUOTA_DARING = 500;  // ← ubah angka ini jika kuota ditambah/dikurangi
+
+const form = document.getElementById("formView");
+
+
+const SHEET_URL    = form.dataset.appscript;
+const KUOTA_LURING = form.dataset.luring;    // ← ubah angka ini jika kuota ditambah/dikurangi
+const KUOTA_DARING = form.dataset.daring;  // ← ubah angka ini jika kuota ditambah/dikurangi
+const NIM_KONSEKUENSI = JSON.parse(form.dataset.blacklist);
 
 // ============================================================
 // DAFTAR NIM KONSEKUENSI
@@ -11,11 +16,11 @@ const KUOTA_DARING = 500;  // ← ubah angka ini jika kuota ditambah/dikurangi
 // → hanya boleh daftar daring pada pelatihan ini
 // Tambahkan NIM baru di sini (format string, termasuk angka 0 di depan)
 // ============================================================
-var NIM_KONSEKUENSI = [
-  "041234567",
-  "042345678"
-  // tambahkan NIM lain di sini...
-];
+// var NIM_KONSEKUENSI = [
+//   "041234567",
+//   "042345678"
+//   // tambahkan NIM lain di sini...
+// ];
 const CACHE_KEY    = "kuota_cache";
 const CACHE_TTL    = 60000; // cache berlaku 60 detik
 
